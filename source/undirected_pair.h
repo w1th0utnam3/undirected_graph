@@ -20,6 +20,7 @@
 #ifndef UNDIRECTEDPAIR
 #define UNDIRECTEDPAIR
 
+#include <cstddef>
 #include <stdexcept>
 
 /**
@@ -89,5 +90,24 @@ public:
 	inline bool operator<=(const undirected_pair& rhs) const {return !(*this > rhs);}
 	inline bool operator>=(const undirected_pair& rhs) const {return !(*this < rhs);}
 };
+
+namespace std {
+
+	/**
+	 * @brief Hash functor for undirected_pair
+	 *
+	 * This functor provides a specialization of the std::hash functor for an undirected_pair
+	 * to store them in containers like an unordered_map. To use this functor, the type T has
+	 * to provide a std::hash specialization itself.
+	 */
+	template <typename T>
+	struct hash<undirected_pair<T>>
+	{
+		inline std::size_t operator()(const undirected_pair<T>& obj) const
+		{
+			return (std::hash<T>()(obj.smaller_element()) ^ (std::hash<T>()(obj.bigger_element()) << 1));
+		}
+	};
+}
 
 #endif //UNDIRECTEDPAIR

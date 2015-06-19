@@ -22,8 +22,8 @@
 
 #include <cstddef>
 #include <utility>
-#include <map>
 #include <list>
+#include <unordered_map>
 
 /**
  * @brief Undirected graph with vertices and edges
@@ -52,21 +52,19 @@ private:
 	//! Type of the current graph
 	typedef undirected_graph<vertex_data_type, vertex_id_type, edge_data_type, edge_id_type> graph_type;
 	//! Type for the container of vertex data in the graph
-	typedef std::map<vertex_id_type, vertex_data_type> vertex_container;
+	typedef std::unordered_map<vertex_id_type, vertex_data_type> vertex_container;
 	//! Type for the container of edge data in the graph
-	typedef std::map<edge_id_type, edge_data_type> edge_container;
+	typedef std::unordered_map<edge_id_type, edge_data_type> edge_container;
 	//! Type for the adjacency lists of the graph
 	typedef std::list<vertex_id_type> adjacency_list;
 	//! Type for the container of the adjacency lists in the graph
-	typedef std::map<vertex_id_type, adjacency_list> adjacency_container;
+	typedef std::unordered_map<vertex_id_type, adjacency_list> adjacency_container;
 
 	vertex_container vertices;			/*!< Container for the vertex data */
 	edge_container edges;				/*!< Container for the edge data */
 	adjacency_container adjacency;		/*!< Container for adjacency lists */
 
 public:
-	// TODO: Delete connections by vertex- and by edge-iterator
-	// TODO: Emplace hint
 	// TODO: Erase by iterator
 
 	//! Iterator for vertices in the graph. It behaves like a std::map iterator with it->first being the vertex id and it->second being the mapped vertex data.

@@ -20,8 +20,10 @@
 #ifndef GRAPHSEARCHITERATOR
 #define GRAPHSEARCHITERATOR
 
+#include <map>
 #include <queue>
 #include <stack>
+#include <unordered_set>
 
 /**
  * @brief Base class for search iterators in a graph
@@ -47,7 +49,7 @@ public:
 	{
 		if(!g.empty()) {
 			m_waiting.push(start);
-			m_discovered.emplace(start->first, true);
+			m_discovered.emplace(start->first);
 		}
 	}
 
@@ -86,7 +88,7 @@ protected:
 	//! Queue for waiting vertex iterators
 	waiting_container m_waiting;
 	//! The vertices that were already visited
-	std::map<typename graph::vertex_id_type, bool> m_discovered;
+	std::unordered_set<typename graph::vertex_id_type> m_discovered;
 	//! The graph this iterator traverses
 	const graph* m_graph;
 };
@@ -126,7 +128,7 @@ public:
 		for(auto it = this->m_graph->begin_adjacent(next->first); it != this->m_graph->end_adjacent(next->first); ++it) {
 			if(this->m_discovered.count(*it) == 0) {
 				this->m_waiting.push(this->m_graph->find_vertex(*it));
-				this->m_discovered.emplace(*it, true);
+				this->m_discovered.emplace(*it);
 			}
 		}
 
@@ -169,7 +171,7 @@ public:
 		for(auto it = this->m_graph->begin_adjacent(next->first); it != this->m_graph->end_adjacent(next->first); ++it) {
 			if(this->m_discovered.count(*it) == 0) {
 				this->m_waiting.push(this->m_graph->find_vertex(*it));
-				this->m_discovered.emplace(*it, true);
+				this->m_discovered.emplace(*it);
 			}
 		}
 
