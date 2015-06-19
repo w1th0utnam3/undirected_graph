@@ -5,8 +5,7 @@ During my work on a group assignment I needed a graph container to store objects
 I knew that there is an implementation in the boost library but I wanted to play a little bit with
 templates and see how far I can get with it.
 
-The feature set of the container is limited but definitely enough for simple applications. Furthermore the
-graph might be not as efficient as possible because it uses `std::map` and `std::list` containers as its
+The feature set of the container is limited but definitely enough for simple applications. Furthermore my implementation may be quite far from optimal performance because it uses (among others) `std::unordered_map` containers as its
 underlying data structures. Again I didn't want to create a perfectly optimized implementation but to
 learn and have fun coding. If you have ideas for improvements or find bugs, feel free to notify me about them!
 
@@ -103,5 +102,4 @@ Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. T
 ## Todo
 
 - Implement `erase` functions with iterator parameter
-- Have more ideas for cool features
-- Earn more money
+- Have some ideas how to make it fast by not using `std::map`
