@@ -22,7 +22,7 @@
 
 #include <cstddef>
 #include <utility>
-#include <list>
+#include <forward_list>
 #include <unordered_map>
 
 /**
@@ -56,7 +56,7 @@ private:
 	//! Type for the container of edge data in the graph
 	typedef std::unordered_map<edge_id_type, edge_data_type> edge_container;
 	//! Type for the adjacency lists of the graph
-	typedef std::list<vertex_id_type> adjacency_list;
+	typedef std::forward_list<vertex_id_type> adjacency_list;
 	//! Type for the container of the adjacency lists in the graph
 	typedef std::unordered_map<vertex_id_type, adjacency_list> adjacency_container;
 
@@ -75,9 +75,9 @@ public:
 	typedef typename edge_container::iterator graph_edge_iterator;
 	//! Const iterator for edges in the graph. It behaves like a std::map iterator with it->first being the edge id and it->second being the mapped edge data.
 	typedef typename edge_container::const_iterator graph_edge_const_iterator;
-	//! Iterator for adjacencent vertices in the graph. It behaves like a std::list iterator dereferencing to the id of the adjacent vertex.
+	//! Iterator for adjacencent vertices in the graph. It behaves like a std::forward_list iterator dereferencing to the id of the adjacent vertex.
 	typedef typename adjacency_list::iterator graph_adjacency_iterator;
-	//! Const iterator for adjacencent vertices in the graph. It behaves like a std::list iterator dereferencing to the id of the adjacent vertex.
+	//! Const iterator for adjacencent vertices in the graph. It behaves like a std::forward_list iterator dereferencing to the id of the adjacent vertex.
 	typedef typename adjacency_list::const_iterator graph_adjacency_const_iterator;
 
 	/**
@@ -240,6 +240,7 @@ public:
 	 *
 	 * Returns an iterator referring to the first adjacent vertex of the specified vertex.
 	 * If the adjacency list is empty, the returned iterator value shall not be dereferenced.
+	 * It behaves like a forward_list iterator.
 	 * @return An iterator to the first adjacent vertex in the container.
 	 */
 	graph_adjacency_iterator begin_adjacent(const vertex_id_type& vertex)
@@ -254,6 +255,7 @@ public:
 	 * Returns an iterator referring to the past-the-end adjacent vertex to the specified vertex.
 	 * It does not point to any element, and thus shall not be dereferenced.
 	 * If the adjacency list is empty, this function returns the same as undirected_graph::begin_adjacent.
+	 * It behaves like a forward_list iterator.
 	 * @return An iterator to the past-the-end adjacent vertex of the specified vertex.
 	 */
 	graph_adjacency_iterator end_adjacent(const vertex_id_type& vertex)
@@ -315,11 +317,13 @@ public:
 
 			// Delete reverse adjacency entries
 			auto& other_adj_list = adjacency.at(other_id);
+			auto it_prev = other_adj_list.before_begin();
 			for(auto it = other_adj_list.begin(); it != other_adj_list.end(); ++it) {
 				if(*it == vertex_id) {
-					other_adj_list.erase(it);
+					other_adj_list.erase_after(it);
 					break;
 				}
+				it_prev = it;
 			}
 		}
 
@@ -344,21 +348,25 @@ public:
 		if(count == 0) return false;
 
 		// Remove adjacency of b from a
-		auto& adjacency_list_a = adjacency.at(edge_id.a);
+		auto& adjacency_list_a = adjacency.at(edge_id.a);		
+		auto it_prev_a = adjacency_list_a.before_begin();
 		for(auto it = adjacency_list_a.begin(); it != adjacency_list_a.end(); ++it) {
 			if(*it == edge_id.b) {
-				adjacency_list_a.erase(it);
+				adjacency_list_a.erase_after(it_prev_a);
 				break;
 			}
+			it_prev_a = it;
 		}
 
 		// Remove adjacency of a from b
 		auto& adjacency_list_b = adjacency.at(edge_id.b);
+		auto it_prev_b = adjacency_list_b.before_begin();
 		for(auto it = adjacency_list_b.begin(); it != adjacency_list_b.end(); ++it) {
 			if(*it == edge_id.a) {
-				adjacency_list_b.erase(it);
+				adjacency_list_b.erase_after(it_prev_b);
 				break;
 			}
+			it_prev_b = it;
 		}
 
 		return true;
@@ -385,8 +393,8 @@ public:
 
 		// Create adjacency entries if the edge was added
 		if(pair.second) {
-			adjacency.at(vertex_a).push_back(vertex_b);
-			adjacency.at(vertex_b).push_back(vertex_a);
+			adjacency.at(vertex_a).push_front(vertex_b);
+			adjacency.at(vertex_b).push_front(vertex_a);
 		}
 
 		// Return iterator
