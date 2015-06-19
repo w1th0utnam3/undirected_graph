@@ -91,11 +91,14 @@ The same applies to the `edge_id_type` with some more restrictions:
 - Access to the two connected `vertex_id`s via a public `a` and `b` member
 
 For a datatype that implements all these requirements have a look at the `undirected_pair`. Nevertheless here are the 
-axioms for the `<`-operator of the `edge_id_type`: Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. Then:
+axioms for the `<`-operator of the `edge_id_type`: 
+```
+Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. Then:
 1. min(a,b) < min(c,d) then: (idA < idB)
 2. If not 1 and min(c,d) < min(a,b) then: (idB < idA)
 3. If not 1 and not 2 and max(a,b) < max(c,d) then: (idA < idB)
 4. If not 1 and not 2 and not 3 then: not (idA < idB)
+```
 
 ## Todo
 
