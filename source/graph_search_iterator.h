@@ -148,7 +148,7 @@ public:
 	 * @brief Constructs a new DFS iterator
 	 *
 	 * Constructs a depth first search iterator object, initializing it with the supplied values.
-	 * @param graph A reference to the graph that should be traversed.
+         * @param g A reference to the graph that should be traversed.
 	 * @param start Vertex iterator to the node that should be used as a starting point.
 	 */
 	depth_first_iterator(const graph& g, typename graph::graph_vertex_const_iterator start)
