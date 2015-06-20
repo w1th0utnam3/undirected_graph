@@ -2,7 +2,7 @@
 A simple (probably incomplete) implementation of an undirected graph in c++ using the stl.
 
 During my work on a group assignment I needed a graph container to store objects and their connections.
-I knew that there is an implementation in the boost library but I wanted to play a little bit with
+I knew that there is an implementation in the boost library (http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/) but I wanted to play a little bit with
 templates and see how far I can get with it.
 
 The feature set of the container is limited but definitely enough for simple applications. Furthermore my implementation may be quite far from optimal performance because it uses (among others) `std::unordered_map` containers as its
