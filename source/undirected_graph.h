@@ -67,13 +67,13 @@ private:
 public:
 	// TODO: Erase by iterator
 
-	//! Iterator for vertices in the graph. It behaves like a std::map iterator with it->first being the vertex id and it->second being the mapped vertex data.
+	//! Iterator for vertices in the graph. It behaves like a std::unordered_map iterator with it->first being the vertex id and it->second being the mapped vertex data.
 	typedef typename vertex_container::iterator graph_vertex_iterator;
-	//! Const iterator for vertices in the graph. It behaves like a std::map iterator with it->first being the vertex id and it->second being the mapped vertex data.
+	//! Const iterator for vertices in the graph. It behaves like a std::unordered_map iterator with it->first being the vertex id and it->second being the mapped vertex data.
 	typedef typename vertex_container::const_iterator graph_vertex_const_iterator;
-	//! Iterator for edges in the graph. It behaves like a std::map iterator with it->first being the edge id and it->second being the mapped edge data.
+	//! Iterator for edges in the graph. It behaves like a std::unordered_map iterator with it->first being the edge id and it->second being the mapped edge data.
 	typedef typename edge_container::iterator graph_edge_iterator;
-	//! Const iterator for edges in the graph. It behaves like a std::map iterator with it->first being the edge id and it->second being the mapped edge data.
+	//! Const iterator for edges in the graph. It behaves like a std::unordered_map iterator with it->first being the edge id and it->second being the mapped edge data.
 	typedef typename edge_container::const_iterator graph_edge_const_iterator;
 	//! Iterator for adjacencent vertices in the graph. It behaves like a std::forward_list iterator dereferencing to the id of the adjacent vertex.
 	typedef typename adjacency_list::iterator graph_adjacency_iterator;
