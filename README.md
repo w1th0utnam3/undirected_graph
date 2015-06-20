@@ -8,6 +8,7 @@ templates and see how far I can get with it.
 The feature set of the container is limited but definitely enough for simple applications. Furthermore my implementation may be quite far from optimal performance because it uses (among others) `std::unordered_map` containers as its
 underlying data structures. Again I didn't want to create a perfectly optimized implementation but to
 learn and have fun coding. If you have ideas for improvements or find bugs, feel free to notify me about them!
+When I have time I'll check whether using google's `dense_hash_map` results in better performance.
 
 The project is licensed under the GNU GPL v2 license. Have a look into the LICENSE file for more information.
 
@@ -101,5 +102,6 @@ Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. T
 
 ## Todo
 
-- Implement `erase` functions with iterator parameter
-- Have some ideas how to make it fast by not using `std::map`
+- Implement `erase` by iterator functions
+- Make sure that it works with google sparsehash containers (`dense_hash_map` and `dense_hash_set`, see https://code.google.com/p/sparsehash/)
+- Check whether the interface is ok to use `unique_ptr` as data objects
