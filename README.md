@@ -77,7 +77,7 @@ Two subclasses are supplied: a breadth-first and a depth-first iterator.
 
 ## Requirements for the data types
 
-There are no requirements or restrictions on the datatypes supplied as `vertex_data_type` or `edge_data_type`.
+There are no requirements or restrictions on the data types supplied as `vertex_data_type` or `edge_data_type`.
 However there are some requirements for the id types. 
 
 `vertex_id_type` basically has to fulfil the same requirements as for an `unordered_set` and a `std::map`. Namely:
@@ -90,7 +90,7 @@ The same applies to the `edge_id_type` with some more restrictions:
 - Equality operator where `edge_id(a,b) == edge_id(b,a)` (this also affects the `<`-operator and hash functor, see below)
 - Access to the two connected `vertex_id`s via a public `a` and `b` member
 
-For a datatype that implements all these requirements have a look at the `undirected_pair`. Nevertheless here are the 
+For a data type that implements all these requirements have a look at the `undirected_pair`. Nevertheless here are the 
 axioms for the `<`-operator of the `edge_id_type`: 
 ```
 Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. Then:
@@ -99,12 +99,3 @@ Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. T
 3. If not 1 and not 2 and max(a,b) < max(c,d) then: (idA < idB)
 4. If not 1 and not 2 and not 3 then: not (idA < idB)
 ```
-
-## Todo
-
-- Implement `erase` by iterator functions
-- Implement unit tests
-- Make sure that it works with google sparsehash containers (`dense_hash_map` and `dense_hash_set`, see https://code.google.com/p/sparsehash/)
-- Check whether the interface is ok when using `unique_ptr` as data objects
-- Check whether there is a performance difference btween storing `forward_list` directly in the adjacency
-map vs. storing pointers to the lists in it
