@@ -34,8 +34,10 @@
         <h1>
 <a id="undirected_graph" class="anchor" href="#undirected_graph" aria-hidden="true"><span class="octicon octicon-link"></span></a>undirected_graph</h1>
 
+<p>A simple (probably incomplete) implementation of an undirected graph in c++ using the stl.</p>
+
 <p>During my work on a group assignment I needed a graph container to store objects and their connections.
-I knew that there is an implementation in the boost library but I wanted to play a little bit with
+I knew that there is an implementation in the boost library (<a href="http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/">http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/</a>) but I wanted to play a little bit with
 templates and see how far I can get with it.</p>
 
 <p>The feature set of the container is limited but definitely enough for simple applications. Furthermore my implementation may be quite far from optimal performance because it uses (among others) <code>std::unordered_map</code> containers as its
@@ -120,7 +122,7 @@ Two subclasses are supplied: a breadth-first and a depth-first iterator.</li>
 <h2>
 <a id="requirements-for-the-data-types" class="anchor" href="#requirements-for-the-data-types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements for the data types</h2>
 
-<p>There are no requirements or restrictions on the datatypes supplied as <code>vertex_data_type</code> or <code>edge_data_type</code>.
+<p>There are no requirements or restrictions on the data types supplied as <code>vertex_data_type</code> or <code>edge_data_type</code>.
 However there are some requirements for the id types. </p>
 
 <p><code>vertex_id_type</code> basically has to fulfil the same requirements as for an <code>unordered_set</code> and a <code>std::map</code>. Namely:</p>
@@ -142,7 +144,7 @@ However there are some requirements for the id types. </p>
 <li>Access to the two connected <code>vertex_id</code>s via a public <code>a</code> and <code>b</code> member</li>
 </ul>
 
-<p>For a datatype that implements all these requirements have a look at the <code>undirected_pair</code>. Nevertheless here are the 
+<p>For a data type that implements all these requirements have a look at the <code>undirected_pair</code>. Nevertheless here are the 
 axioms for the <code>&lt;</code>-operator of the <code>edge_id_type</code>: </p>
 
 <pre><code>Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. Then:
@@ -151,18 +153,6 @@ axioms for the <code>&lt;</code>-operator of the <code>edge_id_type</code>: </p>
 3. If not 1 and not 2 and max(a,b) &lt; max(c,d) then: (idA &lt; idB)
 4. If not 1 and not 2 and not 3 then: not (idA &lt; idB)
 </code></pre>
-
-<h2>
-<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Todo</h2>
-
-<ul>
-<li>Implement <code>erase</code> by iterator functions</li>
-<li>Implement unit tests</li>
-<li>Make sure that it works with google sparsehash containers (<code>dense_hash_map</code> and <code>dense_hash_set</code>, see <a href="https://code.google.com/p/sparsehash/">https://code.google.com/p/sparsehash/</a>)</li>
-<li>Check whether the interface is ok when using <code>unique_ptr</code> as data objects</li>
-<li>Check whether there is a performance difference btween storing <code>forward_list</code> directly in the adjacency
-map vs. storing pointers to the lists in it</li>
-</ul>
       </section>
     </div>
 
