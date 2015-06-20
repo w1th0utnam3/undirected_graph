@@ -103,5 +103,8 @@ Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. T
 ## Todo
 
 - Implement `erase` by iterator functions
+- Implement unit tests
 - Make sure that it works with google sparsehash containers (`dense_hash_map` and `dense_hash_set`, see https://code.google.com/p/sparsehash/)
-- Check whether the interface is ok to use `unique_ptr` as data objects
+- Check whether the interface is ok when using `unique_ptr` as data objects
+- Check whether there is a performance difference btween storing `forward_list` directly in the adjacency
+map vs. storing pointers to the lists in it
