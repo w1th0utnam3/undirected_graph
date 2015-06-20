@@ -38,10 +38,10 @@
 I knew that there is an implementation in the boost library but I wanted to play a little bit with
 templates and see how far I can get with it.</p>
 
-<p>The feature set of the container is limited but definitely enough for simple applications. Furhtermore the
-graph might be not as efficient as possible because it uses <code>std::map</code> and <code>std::list</code> containers as its
+<p>The feature set of the container is limited but definitely enough for simple applications. Furthermore my implementation may be quite far from optimal performance because it uses (among others) <code>std::unordered_map</code> containers as its
 underlying data structures. Again I didn't want to create a perfectly optimized implementation but to
-learn and have fun coding. If you have ideas for improvements or find bugs, feel free to notfiy me about them!</p>
+learn and have fun coding. If you have ideas for improvements or find bugs, feel free to notify me about them!
+When I have time I'll check whether using google's <code>dense_hash_map</code> results in better performance.</p>
 
 <p>The project is licensed under the GNU GPL v2 license. Have a look into the LICENSE file for more information.</p>
 
@@ -60,6 +60,10 @@ would be the <code>vertex_id_type</code> of the graph.</p>
 
 <div class="highlight highlight-c++"><pre><span class="pl-k">template </span>&lt;<span class="pl-k">typename</span> T&gt;
 <span class="pl-k">class</span> <span class="pl-en">undirected_pair</span>;</pre></div>
+
+<p>Most of the time you can use <code>int</code> or <code>size_t</code> as the <code>vertex_id_type</code> and <code>undirected_pair&lt;int&gt;</code> or respectively
+<code>undirected_pair&lt;size_t&gt;</code> as the <code>edge_id_type</code>. If you want to use your own id types (maybe you already have ids
+for the objects in your code) make sure to check the requirements some paragraphs below.</p>
 
 <h2>
 <a id="what-does-it-do" class="anchor" href="#what-does-it-do" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does it do?</h2>
@@ -111,6 +115,53 @@ edge ids in the graph.</li>
 <li>
 <code>graph_search_iterator</code> is an abstract class that provides an interface for graph traversal iterators.
 Two subclasses are supplied: a breadth-first and a depth-first iterator.</li>
+</ul>
+
+<h2>
+<a id="requirements-for-the-data-types" class="anchor" href="#requirements-for-the-data-types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements for the data types</h2>
+
+<p>There are no requirements or restrictions on the datatypes supplied as <code>vertex_data_type</code> or <code>edge_data_type</code>.
+However there are some requirements for the id types. </p>
+
+<p><code>vertex_id_type</code> basically has to fulfil the same requirements as for an <code>unordered_set</code> and a <code>std::map</code>. Namely:</p>
+
+<ul>
+<li>Equality operator <code>==</code>
+</li>
+<li>Strict weak ordering operator <code>&lt;</code>
+</li>
+<li>Specialized <code>std::hash</code> functor (see <a href="http://stackoverflow.com/a/17017281/929037">http://stackoverflow.com/a/17017281/929037</a>)</li>
+</ul>
+
+<p>The same applies to the <code>edge_id_type</code> with some more restrictions:</p>
+
+<ul>
+<li>Additional constructor with the signature <code>edge_id(vertex_id a, vertex_id b)</code>
+</li>
+<li>Equality operator where <code>edge_id(a,b) == edge_id(b,a)</code> (this also affects the <code>&lt;</code>-operator and hash functor, see below)</li>
+<li>Access to the two connected <code>vertex_id</code>s via a public <code>a</code> and <code>b</code> member</li>
+</ul>
+
+<p>For a datatype that implements all these requirements have a look at the <code>undirected_pair</code>. Nevertheless here are the 
+axioms for the <code>&lt;</code>-operator of the <code>edge_id_type</code>: </p>
+
+<pre><code>Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. Then:
+1. min(a,b) &lt; min(c,d) then: (idA &lt; idB)
+2. If not 1 and min(c,d) &lt; min(a,b) then: (idB &lt; idA)
+3. If not 1 and not 2 and max(a,b) &lt; max(c,d) then: (idA &lt; idB)
+4. If not 1 and not 2 and not 3 then: not (idA &lt; idB)
+</code></pre>
+
+<h2>
+<a id="todo" class="anchor" href="#todo" aria-hidden="true"><span class="octicon octicon-link"></span></a>Todo</h2>
+
+<ul>
+<li>Implement <code>erase</code> by iterator functions</li>
+<li>Implement unit tests</li>
+<li>Make sure that it works with google sparsehash containers (<code>dense_hash_map</code> and <code>dense_hash_set</code>, see <a href="https://code.google.com/p/sparsehash/">https://code.google.com/p/sparsehash/</a>)</li>
+<li>Check whether the interface is ok when using <code>unique_ptr</code> as data objects</li>
+<li>Check whether there is a performance difference btween storing <code>forward_list</code> directly in the adjacency
+map vs. storing pointers to the lists in it</li>
 </ul>
       </section>
     </div>
