@@ -68,9 +68,7 @@ would be the <code>vertex_id_type</code> of the graph.</p>
 for the objects in your code) make sure to check the requirements some paragraphs below.</p>
 
 <h2>
-<a id="what-does-it-do" class="anchor" href="#what-does-it-do" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does it do?</h2>
-
-<p>For a full list of features have in look in the documentation which will be added soon.</p>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
 
 <p>The graph allows to store vertex data types with unique ids which are connected by edge data objects which
 have in turn unique ids. Naturally the graph is implemented using templates and therefore every data type
@@ -80,29 +78,49 @@ is supported.</p>
 (b) it's what you're probably used to after working with stl containers. The only difference is that most methods
 have an appended <code>_vertex</code> or <code>_edge</code> to indicate on which object the method works.</p>
 
+<p>It is possible to:</p>
+
+<ul>
+<li>add vertex data with a unique id</li>
+<li>add edge data by specifying two vertex ids that aren't already connected</li>
+<li>access the data by reference using the corresponding id</li>
+<li>remove vertices and egdes by id</li>
+<li>iterate through all vertices or edges (unordered)</li>
+<li>iterate through all adjacent vertices of a vertex with a specified id</li>
+<li>iterate through the graph vertices by using an breadth- or depth-first search iterator</li>
+</ul>
+
 <p>Some example code:</p>
 
 <div class="highlight highlight-c++"><pre><span class="pl-k">typedef</span> undirected_graph&lt;std::string, <span class="pl-c1">size_t</span>, <span class="pl-k">double</span>, undirected_pair&lt;<span class="pl-c1">size_t</span>&gt;&gt; graph_type;
 graph_type graph;
 
+<span class="pl-c">// Build graph</span>
 graph.insert_vertex(<span class="pl-c1">1</span>, <span class="pl-s"><span class="pl-pds">"</span>Hello world!<span class="pl-pds">"</span></span>);
 graph.insert_vertex(<span class="pl-c1">2</span>, <span class="pl-s"><span class="pl-pds">"</span>Some more text.<span class="pl-pds">"</span></span>);
 graph.insert_vertex(<span class="pl-c1">3</span>, <span class="pl-s"><span class="pl-pds">"</span>Hi<span class="pl-pds">"</span></span>);
-
 graph.insert_edge(<span class="pl-c1">1</span>, <span class="pl-c1">2</span>, <span class="pl-c1">44.12</span>);
 graph.insert_edge(<span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <span class="pl-c1">22.34</span>);
 
+<span class="pl-c">// Print edge data</span>
 <span class="pl-k">for</span>(<span class="pl-k">auto</span> it = graph.begin_edges(); it != graph.end_edges(); ++it) {
         std::cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Connection<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;first.<span class="pl-smi">a</span> &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>to<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;first.<span class="pl-smi">b</span> 
                   &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>with value:<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;second &lt;&lt; std::endl;
 }
 
+breadth_first_iterator&lt;graph_type&gt; <span class="pl-en">bfs</span>(graph, graph.find_vertex(<span class="pl-c1">1</span>));
+<span class="pl-c">// Iterate through the graph and print the strings</span>
+<span class="pl-k">while</span>(!bfs.end()) {
+    std::cout &lt;&lt; bfs.<span class="pl-c1">next</span>()-&gt;second &lt;&lt; std::endl
+}
+
+<span class="pl-c">// Remove a vertex and its edge(s)</span>
 graph.erase_vertex(<span class="pl-c1">2</span>);</pre></div>
 
 <p>More example code will be added to the repository soon.</p>
 
 <h2>
-<a id="what-does-this-project-supply" class="anchor" href="#what-does-this-project-supply" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does this project supply?</h2>
+<a id="what-does-this-project-contain" class="anchor" href="#what-does-this-project-contain" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does this project contain?</h2>
 
 <p>The project consist mainly of three parts:</p>
 
@@ -125,7 +143,7 @@ Two subclasses are supplied: a breadth-first and a depth-first iterator.</li>
 <p>There are no requirements or restrictions on the data types supplied as <code>vertex_data_type</code> or <code>edge_data_type</code>.
 However there are some requirements for the id types. </p>
 
-<p><code>vertex_id_type</code> basically has to fulfil the same requirements as for an <code>unordered_set</code> and a <code>std::map</code>. Namely:</p>
+<p><code>vertex_id_type</code> basically has to fulfil the same requirements as a key for an <code>std::unordered_set</code> and a <code>std::map</code>. Namely:</p>
 
 <ul>
 <li>Equality operator <code>==</code>
