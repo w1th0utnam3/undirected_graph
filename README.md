@@ -31,9 +31,7 @@ Most of the time you can use `int` or `size_t` as the `vertex_id_type` and `undi
 `undirected_pair<size_t>` as the `edge_id_type`. If you want to use your own id types (maybe you already have ids
 for the objects in your code) make sure to check the requirements some paragraphs below.
 
-## What does it do?
-
-For a full list of features have in look in the documentation which will be added soon.
+## Features
 
 The graph allows to store vertex data types with unique ids which are connected by edge data objects which
 have in turn unique ids. Naturally the graph is implemented using templates and therefore every data type
@@ -43,28 +41,45 @@ In most operations the graph behaves similar to the `std::map` container because
 (b) it's what you're probably used to after working with stl containers. The only difference is that most methods
 have an appended `_vertex` or `_edge` to indicate on which object the method works.
 
+It is possible to:
+ - add vertex data with a unique id
+ - add edge data by specifying two vertex ids that aren't already connected
+ - access the data by reference using the corresponding id
+ - remove vertices and egdes by id
+ - iterate through all vertices or edges (unordered)
+ - iterate through all adjacent vertices of a vertex with a specified id
+ - iterate through the graph vertices by using an breadth- or depth-first search iterator
+
 Some example code:
 ```c++
 typedef undirected_graph<std::string, size_t, double, undirected_pair<size_t>> graph_type;
 graph_type graph;
 
+// Build graph
 graph.insert_vertex(1, "Hello world!");
 graph.insert_vertex(2, "Some more text.");
 graph.insert_vertex(3, "Hi");
-
 graph.insert_edge(1, 2, 44.12);
 graph.insert_edge(2, 3, 22.34);
 
+// Print edge data
 for(auto it = graph.begin_edges(); it != graph.end_edges(); ++it) {
 		std::cout << "Connection" << it->first.a << "to" << it->first.b 
 				  << "with value:" << it->second << std::endl;
 }
 
+breadth_first_iterator<graph_type> bfs(graph, graph.find_vertex(1));
+// Iterate through the graph and print the strings
+while(!bfs.end()) {
+	std::cout << bfs.next()->second << std::endl
+}
+
+// Remove a vertex and its edge(s)
 graph.erase_vertex(2);
 ```
 More example code will be added to the repository soon.
 
-## What does this project supply?
+## What does this project contain?
 
 The project consist mainly of three parts:
 - `undirected_graph` the main component of the graph I've been writing about this whole document.
@@ -80,7 +95,7 @@ Two subclasses are supplied: a breadth-first and a depth-first iterator.
 There are no requirements or restrictions on the data types supplied as `vertex_data_type` or `edge_data_type`.
 However there are some requirements for the id types. 
 
-`vertex_id_type` basically has to fulfil the same requirements as for an `unordered_set` and a `std::map`. Namely:
+`vertex_id_type` basically has to fulfil the same requirements as a key for an `std::unordered_set` and a `std::map`. Namely:
 - Equality operator `==`
 - Strict weak ordering operator `<`
 - Specialized `std::hash` functor (see http://stackoverflow.com/a/17017281/929037)
