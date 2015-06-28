@@ -102,7 +102,7 @@ int run_pair_test() {
 	return 0;
 }
 
-int run_graph_test() {
+int run_graph_vertex_test() {
 	// Initialize random number generator
 	std::default_random_engine random(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
@@ -132,7 +132,7 @@ int run_graph_test() {
 	ok();
 
 	// Try inserting vertices already present
-	msg("Trying to insert some values again");
+	msg("Trying to reinsert some values");
 	for(size_t i = (n/4); i < (n/2); i++) {
 		auto pair = graph.insert_vertex(i, "Already there");
 		assert(!pair.second);
@@ -181,9 +181,17 @@ int run_graph_test() {
 	assert(graph.empty());
 	ok();
 
+	return 0;
+}
+
+int run_graph_edge_test()
+{
 	// TODO: Check edge insertion
 	// TODO: Check edge removal
 	// TODO: Check adjacency entries (after vertex/edge removal)
+	// TODO: Check self adjacency
+
+	std::cout << "No tests yet." << std::endl;
 
 	return 0;
 }
@@ -265,8 +273,12 @@ int main()
 	state += run_pair_test();
 	std::cout << std::endl;
 
-	std::cout << "Running graph tests..." << std::endl;
-	state += run_graph_test();
+	std::cout << "Running graph vertex tests..." << std::endl;
+	state += run_graph_vertex_test();
+	std::cout << std::endl;
+
+	std::cout << "Running graph edge tests..." << std::endl;
+	state += run_graph_edge_test();
 	std::cout << std::endl;
 
 	std::cout << "Running iterator tests..." << std::endl;
