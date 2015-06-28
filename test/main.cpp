@@ -125,7 +125,18 @@ int run_graph_test() {
 	for(size_t i = 0; i < n; i++) {
 		std::string string(std::to_string(random()));
 		strings.push_back(string);
-		graph.insert_vertex(i, string);
+		auto pair = graph.insert_vertex(i, string);
+		assert(pair.second);
+		assert(string.compare(pair.first->second) == 0);
+	}
+	ok();
+
+	// Try inserting vertices already present
+	msg("Trying to insert some values again");
+	for(size_t i = (n/4); i < (n/2); i++) {
+		auto pair = graph.insert_vertex(i, "Already there");
+		assert(!pair.second);
+		assert(strings[i].compare(pair.first->second) == 0);
 	}
 	ok();
 
@@ -242,6 +253,12 @@ int run_iterator_test()
 
 int main()
 {
+	#ifdef NDEBUG
+		std::cout << "WARNING: This is no debug build! Asserts (i.e. the tests) won't work!" << std::endl;
+		std::cout << "Please rebuild without NDEBUG!" << std::endl;
+		return 1;
+	#endif
+
 	int state = 0;
 
 	std::cout << "Running pair tests..." << std::endl;
