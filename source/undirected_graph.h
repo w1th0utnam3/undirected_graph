@@ -394,7 +394,7 @@ public:
 		// Create adjacency entries if the edge was added
 		if(pair.second) {
 			adjacency.at(vertex_a).push_front(vertex_b);
-			adjacency.at(vertex_b).push_front(vertex_a);
+			if(vertex_a != vertex_b) adjacency.at(vertex_b).push_front(vertex_a);
 		}
 
 		// Return iterator
