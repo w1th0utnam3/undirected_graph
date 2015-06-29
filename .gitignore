@@ -1,4 +1,7 @@
 doc_temp/
+temp/
+
+*_conflict-*
 
 # C++ objects and libs
 

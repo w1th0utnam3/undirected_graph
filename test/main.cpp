@@ -110,7 +110,7 @@ int run_graph_vertex_test() {
 	const int n = 100000;
 
 	// Set graph type
-	typedef undirected_graph<std::string, size_t, std::string, undirected_pair<size_t>> graph_type;
+	typedef undirected_graph<size_t, std::string, undirected_pair<size_t>, std::string> graph_type;
 	graph_type graph;
 	msg("Checking if graph is empty");
 	assert(graph.empty());
@@ -191,6 +191,9 @@ int run_graph_edge_test()
 	// TODO: Check adjacency entries (after vertex/edge removal)
 	// TODO: Check self adjacency
 
+	typedef undirected_graph<size_t, std::string, undirected_pair<size_t>, std::string> graph_type;
+	graph_type graph;
+
 	std::cout << "No tests yet." << std::endl;
 
 	return 0;
@@ -203,7 +206,7 @@ int run_iterator_test()
 	const double n = std::pow(2, m+1)-1;
 
 	// Set graph type
-	typedef undirected_graph<std::string, size_t, std::string, undirected_pair<size_t>> graph_type;
+	typedef undirected_graph<size_t, std::string, undirected_pair<size_t>, std::string> graph_type;
 	graph_type graph;
 
 	msg("Inserting vertices");

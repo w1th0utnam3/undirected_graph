@@ -1,45 +1,55 @@
 # undirected_graph
-A simple (probably incomplete) implementation of an undirected graph in c++ using the stl.
+A simple (probably incomplete) implementation of an undirected graph in c++
+using the stl.
 
-During my work on a group assignment I needed a graph container to store objects and their connections.
-I knew that there is an implementation in the boost library (http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/) but I wanted to play a little bit with
-templates and see how far I can get with it.
+During my work on a group assignment I needed a graph container to store objects
+and their connections. I knew that there is an implementation in the boost
+library (http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/) but I wanted to
+play a little bit with templates and see how far I can get with it.
 
-The feature set of the container is limited but definitely enough for simple applications. Furthermore my implementation may be quite far from optimal performance because it uses (among others) `std::unordered_map` containers as its
-underlying data structures. Again I didn't want to create a perfectly optimized implementation but to
-learn and have fun coding. If you have ideas for improvements or find bugs, feel free to notify me about them!
-When I have time I'll check whether using google's `dense_hash_map` results in better performance.
+The feature set of the container is limited but definitely enough for simple
+applications. Furthermore my implementation may be quite far from optimal
+performance because it uses (among others) `std::unordered_map` containers as
+its underlying data structures. Again I didn't want to create a perfectly
+optimized implementation but to learn and have fun coding. If you have ideas for
+improvements or find bugs, feel free to notify me about them! When I have time
+I'll check whether using google's `dense_hash_map` results in better performance.
 
-The project is licensed under the GNU GPL v2 license. Have a look into the LICENSE file for more information.
+The project is licensed under the GNU GPL v2 license. Have a look into the
+LICENSE file for more information.
 
 ## Quickstart
 
-To start using the `undirect_graph` simply include the `.h` files in your project and instantiate the graph
-with the corresponding template arguments:
+To start using the `undirect_graph` simply include the `.h` files in your
+project and instantiate the graph with the corresponding template arguments:
 ```c++
-template <typename vertex_data_type_arg, typename vertex_id_type_arg, 
-		  typename edge_data_type_arg, typename edge_id_type_arg>
+template <class Key_vertex, class T_vertex,
+		  class Key_edge, class T_edge>
 class undirected_graph;
 ```
-The `edge_id_type` has to meet certain criteria, for an easy start use the supplied `undirected_pair<T>` where `T`
-would be the `vertex_id_type` of the graph.
+The `Key_edge` type has to meet certain criteria, for an easy start use the
+supplied `undirected_pair<T>` where `T` would be the `Key_vertex` type of the
+graph.
 ```c++
 template <typename T>
 class undirected_pair;
 ```
-Most of the time you can use `int` or `size_t` as the `vertex_id_type` and `undirected_pair<int>` or respectively
-`undirected_pair<size_t>` as the `edge_id_type`. If you want to use your own id types (maybe you already have ids
-for the objects in your code) make sure to check the requirements some paragraphs below.
+Most of the time you can use `int` or `size_t` as the `Key_vertex` type and
+`undirected_pair<int>` or respectively `undirected_pair<size_t>` as the
+`Key_edge` type. If you want to use your own id types (maybe you already have
+ids for the objects in your code) make sure to check the requirements some
+paragraphs below.
 
 ## Features
 
-The graph allows to store vertex data types with unique ids which are connected by edge data objects which
-have in turn unique ids. Naturally the graph is implemented using templates and therefore every data type
-is supported.
+The graph allows to store vertex data types with unique ids which are connected
+by edge data objects which have in turn unique ids. Naturally the graph is
+implemented using templates and therefore every data type is supported.
 
-In most operations the graph behaves similar to the `std::map` container because (a) it is built using maps and
-(b) it's what you're probably used to after working with stl containers. The only difference is that most methods
-have an appended `_vertex` or `_edge` to indicate on which object the method works.
+In most operations the graph behaves similar to the `std::map` container because
+(a) it is built using maps and (b) it's what you're probably used to after
+working with stl containers. The only difference is that most methods have an
+appended `_vertex` or `_edge` to indicate on which objects the method works.
 
 It is possible to:
  - add vertex data with a unique id
@@ -48,11 +58,12 @@ It is possible to:
  - remove vertices and egdes by id
  - iterate through all vertices or edges (unordered)
  - iterate through all adjacent vertices of a vertex with a specified id
- - iterate through the graph vertices by using an breadth- or depth-first search iterator
+ - iterate through the graph vertices by using an breadth- or depth-first search
+   iterator
 
 Some example code:
 ```c++
-typedef undirected_graph<std::string, size_t, double, undirected_pair<size_t>> graph_type;
+typedef undirected_graph<size_t, std::string, undirected_pair<size_t>, double> graph_type;
 graph_type graph;
 
 // Build graph
@@ -64,7 +75,7 @@ graph.insert_edge(2, 3, 22.34);
 
 // Print edge data
 for(auto it = graph.begin_edges(); it != graph.end_edges(); ++it) {
-		std::cout << "Connection" << it->first.a << "to" << it->first.b 
+		std::cout << "Connection" << it->first.a << "to" << it->first.b
 				  << "with value:" << it->second << std::endl;
 }
 
@@ -77,36 +88,43 @@ while(!bfs.end()) {
 // Remove a vertex and its edge(s)
 graph.erase_vertex(2);
 ```
-More example code will be added to the repository soon.
+You can find more example code in the `main.cpp` in the test subfolder.
 
 ## What does this project contain?
 
 The project consist mainly of three parts:
-- `undirected_graph` the main component of the graph I've been writing about this whole document.
-- `undirected_pair` a simple data type which behaves similar to a `std::pair` except for the fact that it is just
-for one data type, pair(a,b) and pair(b,a) compare as equal and it's sortable. The sorting order
-is determined by the smaller and bigger elements of the pairs. It's a simple data type to use for the
-edge ids in the graph.
-- `graph_search_iterator` is an abstract class that provides an interface for graph traversal iterators.
-Two subclasses are supplied: a breadth-first and a depth-first iterator.
+- `undirected_graph` the main component of the graph I've been writing about
+  this whole document.
+- `undirected_pair` a simple data type which behaves similar to a `std::pair`
+  except for the fact that it is just for one data type, pair(a,b) and pair(b,a)
+  compare as equal and it's sortable. The sorting order is determined by the
+  smaller and bigger elements of the pairs. It's a simple data type to use for
+	the edge ids in the graph.
+- `graph_search_iterator` is an abstract class that provides an interface for
+  graph traversal iterators. Two subclasses are supplied: a breadth-first and a
+  depth-first iterator.
 
 ## Requirements for the data types
 
-There are no requirements or restrictions on the data types supplied as `vertex_data_type` or `edge_data_type`.
-However there are some requirements for the id types. 
+There are no requirements or restrictions on the data types supplied as
+`T_vertex` or `T_edge`. However there are some requirements for
+the id types.
 
-`vertex_id_type` basically has to fulfil the same requirements as a key for an `std::unordered_set` and a `std::map`. Namely:
+`Key_vertex` basically has to fulfil the same requirements as a key for an
+`std::unordered_set` and a `std::map`. Namely:
 - Equality operator `==`
 - Strict weak ordering operator `<`
 - Specialized `std::hash` functor (see http://stackoverflow.com/a/17017281/929037)
 
-The same applies to the `edge_id_type` with some more restrictions:
+The same applies to the `Key_edge` with some more restrictions:
 - Additional constructor with the signature `edge_id(vertex_id a, vertex_id b)`
-- Equality operator where `edge_id(a,b) == edge_id(b,a)` (this also affects the `<`-operator and hash functor, see below)
+- Equality operator where `edge_id(a,b) == edge_id(b,a)` (this also affects the
+	`<`-operator and hash functor, see below)
 - Access to the two connected `vertex_id`s via a public `a` and `b` member
 
-For a data type that implements all these requirements have a look at the `undirected_pair`. Nevertheless here are the 
-axioms for the `<`-operator of the `edge_id_type`: 
+For a data type that implements all these requirements have a look at the
+`undirected_pair`. Nevertheless here are the axioms for the `<`-operator of the
+`Key_edge`:
 ```
 Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. Then:
 1. min(a,b) < min(c,d) then: (idA < idB)

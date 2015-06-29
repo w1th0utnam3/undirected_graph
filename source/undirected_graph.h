@@ -32,21 +32,21 @@
  * There may be multiple vertices with the same value but only one edge between two vertices.
  * The container stores data elements for the vertices and edges. The vertices and edges are identified
  * and sorted by ids which have to be unique in the container.
- * @tparam vertex_data_type The type that should be used for the data elements at the vertices.
- * @tparam vertex_id_type Type for the ids of vertices. Has to support the default comparison operators.
- * @tparam edge_data_type The type that should be used for the data elments at the edges
- * @tparam edge_id_type The type for the ids of edges. Has to provide a constructor taking two vertex ids as well as
+ * @tparam Key_vertex Type for the ids of vertices. Has to support the default comparison operators.
+ * @tparam T_vertex The type that should be used for the data elements at the vertices.
+ * @tparam Key_edge The type for the ids of edges. Has to provide a constructor taking two vertex ids as well as
+ * @tparam T_edge The type that should be used for the data elments at the edges
  * support of the default comparison operators where the order of the two vertices is not important.
  * Furthermore it has to provide access to the two vertex ids with a public a and b member variable.
  */
-template <typename vertex_data_type_arg, typename vertex_id_type_arg, typename edge_data_type_arg, typename edge_id_type_arg>
+template <class Key_vertex, class T_vertex, class Key_edge, class T_edge>
 class undirected_graph
 {
 public:
-	typedef vertex_data_type_arg vertex_data_type;
-	typedef vertex_id_type_arg vertex_id_type;
-	typedef edge_data_type_arg edge_data_type;
-	typedef edge_id_type_arg edge_id_type;
+	typedef T_vertex vertex_data_type;
+	typedef Key_vertex vertex_id_type;
+	typedef T_edge edge_data_type;
+	typedef Key_edge edge_id_type;
 
 private:	
 	//! Type of the current graph
