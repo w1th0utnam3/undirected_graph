@@ -49,6 +49,8 @@ public:
 	typedef Key_edge edge_id_type;
 
 private:	
+	// TODO: Replace forward_list with map because of slow erasing. Use unique_ptr to store them.
+
 	//! Type of the current graph
 	typedef undirected_graph<vertex_data_type, vertex_id_type, edge_data_type, edge_id_type> graph_type;
 	//! Type for the container of vertex data in the graph
@@ -297,7 +299,7 @@ public:
 	 *
 	 * Removes a single vertex from the graph container. This effectively reduces the vertex container
 	 * size by one and the vertex data is destroyed. Also all edge data connected to this vertex
-	 * is destroyed.
+	 * is destroyed. WARNING: Linear in the number of adjacency entries of connected vertices.
 	 * @param vertex_id Id of the vertex that should be removed.
 	 * @return Returns whether the vertex was removed.
 	 */
@@ -337,7 +339,8 @@ public:
 	 * @brief Erase edge
 	 *
 	 * Removes a single edge from the graph container. This effectively reduces the edge container
-	 * size by one and the edge data is destroyed.
+	 * size by one and the edge data is destroyed. WARNING: Linear in the number of adjacent vertices
+	 * of the two connected vertices.
 	 * @param edge_id Id of the edge that should be removed.
 	 * @return Returns whether the edge was removed.
 	 */
