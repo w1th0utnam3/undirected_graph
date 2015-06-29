@@ -22,6 +22,7 @@
 #include <cassert>
 #include <chrono>
 #include <random>
+#include <memory>
 
 #include "../source/undirected_graph.h"
 #include "../source/undirected_pair.h"
@@ -107,7 +108,7 @@ int run_graph_vertex_test() {
 	std::default_random_engine random(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
 	// Number of test entries
-	const int n = 100000;
+	const size_t n = 100000;
 
 	// Set graph type
 	typedef undirected_graph<size_t, std::string, undirected_pair<size_t>, std::string> graph_type;
@@ -186,15 +187,88 @@ int run_graph_vertex_test() {
 
 int run_graph_edge_test()
 {
-	// TODO: Check edge insertion
 	// TODO: Check edge removal
-	// TODO: Check adjacency entries (after vertex/edge removal)
-	// TODO: Check self adjacency
+	// TODO: Check adjacency entries after vertex removal
+
+	// Initialize random number generator
+	std::default_random_engine random(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
+
+	// Number of test entries
+	const size_t n = 500;
 
 	typedef undirected_graph<size_t, std::string, undirected_pair<size_t>, std::string> graph_type;
 	graph_type graph;
 
-	std::cout << "No tests yet." << std::endl;
+	// Vector that stores strings for comparison
+	std::vector<std::string> stringsVertices;
+	stringsVertices.reserve(n);
+
+	msg("Adding some vertices");
+	for(size_t i = 0; i < n; i++) {
+		std::string string(std::to_string(random()));
+		stringsVertices.push_back(string);
+		auto pair = graph.insert_vertex(i, string);
+		assert(pair.second);
+		assert(string.compare(pair.first->second) == 0);
+	}
+	ok();
+
+	std::map<undirected_pair<size_t>, std::string> stringsEdges;
+
+	msg("Adding edges");
+	for(size_t i = 0; i < n; i++) {
+		for(size_t j = i; j < n; j++) {
+			std::string string(std::to_string(random()));
+			stringsEdges.insert(std::make_pair(graph.make_edge_id(i,j),string));
+			auto pair = graph.insert_edge(i, j, string);
+			assert(pair.second);
+			assert(string.compare(pair.first->second) == 0);
+		}
+	}
+	ok();
+
+	msg("Checking adjacency");
+	// Loop through all vertices
+	for(size_t i = 0; i < n; i++) {
+		// Counter for adjacent entries
+		size_t c = 0;
+		// Loop through adjacent vertices
+		for(auto it = graph.begin_adjacent(i); it != graph.end_adjacent(i); ++it) {
+			// Id of the adjacent vertex
+			const size_t j = *it;
+
+			// Check data of adjacent vertex
+			assert(graph.at_vertex(*it).compare(stringsVertices.at(*it)) == 0);
+
+			// Check edge data
+			auto id = graph_type::make_edge_id(i,j);
+			assert(graph.at_edge(id).compare(stringsEdges.at(id)) == 0);
+
+			c++;
+		}
+
+		// Check number of adjacent entries
+		assert(c == n);
+	}
+	ok();
+
+	msg("Removing some edges");
+	for(size_t i = 0; i < n; i+=2) {
+		for(size_t j = 1; j < n; j+=2) {
+			graph.erase_edge(graph_type::make_edge_id(i,j));
+		}
+	}
+	ok();
+
+	msg("Checking adjacency after removing");
+	for(size_t i = 0; i < n; i++) {
+		for(auto it = graph.begin_adjacent(i); it != graph.end_adjacent(i); ++it) {
+			// Check edge data
+			auto id = graph_type::make_edge_id(i,*it);
+			assert(graph.at_edge(id).compare(stringsEdges.at(id)) == 0);
+		}
+	}
+	ok();
 
 	return 0;
 }
