@@ -309,6 +309,26 @@ public:
 		auto count = vertices.erase(vertex_id);
 		if(count == 0) return false;
 
+		/*
+		 * Check if there is a self-adjacency entry because this
+		 * would invalidate iterators in the second loop
+		 */
+		if(edges.count(edge_id_type(vertex_id, vertex_id)) == 1) {
+			// Delete edge
+			edges.erase(edge_id_type(vertex_id, vertex_id));
+
+			// Find and delete adjacency entry
+			auto& adj_list = adjacency.at(vertex_id);
+			auto it_prev = adj_list.before_begin();
+			for(auto it = adj_list.begin(); it != adj_list.end(); ++it) {
+				if(*it == vertex_id) {
+					adj_list.erase_after(it_prev);
+					break;
+				}
+				it_prev = it;
+			}
+		}
+
 		// Loop through all adjacency entries
 		auto& adj_list = adjacency.at(vertex_id);
 		for(auto it = adj_list.begin(); it != adj_list.end(); ++it) {
@@ -322,7 +342,7 @@ public:
 			auto it_prev = other_adj_list.before_begin();
 			for(auto it = other_adj_list.begin(); it != other_adj_list.end(); ++it) {
 				if(*it == vertex_id) {
-					other_adj_list.erase_after(it);
+					other_adj_list.erase_after(it_prev);
 					break;
 				}
 				it_prev = it;
