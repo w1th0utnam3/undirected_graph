@@ -187,9 +187,6 @@ int run_graph_vertex_test() {
 
 int run_graph_edge_test()
 {
-	// TODO: Check edge removal
-	// TODO: Check adjacency entries after vertex removal
-
 	// Initialize random number generator
 	std::default_random_engine random(static_cast<unsigned int>(std::chrono::system_clock::now().time_since_epoch().count()));
 
@@ -265,6 +262,22 @@ int run_graph_edge_test()
 		for(auto it = graph.begin_adjacent(i); it != graph.end_adjacent(i); ++it) {
 			// Check edge data
 			auto id = graph_type::make_edge_id(i,*it);
+			assert(graph.at_edge(id).compare(stringsEdges.at(id)) == 0);
+		}
+	}
+	ok();
+
+	msg("Removing some vertices");
+	for(size_t i = 0; i < n; i+=2) {
+		assert(graph.erase_vertex(i));
+	}
+	ok();
+
+	msg("Checking adjacency after removing");
+	for(auto it = graph.begin_vertices(); it != graph.end_vertices(); it++) {
+		for(auto itAdj = graph.begin_adjacent(it->first); itAdj != graph.end_adjacent(it->first); ++itAdj) {
+			// Check edge data
+			auto id = graph_type::make_edge_id(it->first,*itAdj);
 			assert(graph.at_edge(id).compare(stringsEdges.at(id)) == 0);
 		}
 	}
