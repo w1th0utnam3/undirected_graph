@@ -34,49 +34,59 @@
         <h1>
 <a id="undirected_graph" class="anchor" href="#undirected_graph" aria-hidden="true"><span class="octicon octicon-link"></span></a>undirected_graph</h1>
 
-<p>A simple (probably incomplete) implementation of an undirected graph in c++ using the stl.</p>
+<p>A simple (probably incomplete) implementation of an undirected graph in c++
+using the stl.</p>
 
-<p>During my work on a group assignment I needed a graph container to store objects and their connections.
-I knew that there is an implementation in the boost library (<a href="http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/">http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/</a>) but I wanted to play a little bit with
-templates and see how far I can get with it.</p>
+<p>During my work on a group assignment I needed a graph container to store objects
+and their connections. I knew that there is an implementation in the boost
+library (<a href="http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/">http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/</a>) but I wanted to
+play a little bit with templates and see how far I can get with it.</p>
 
-<p>The feature set of the container is limited but definitely enough for simple applications. Furthermore my implementation may be quite far from optimal performance because it uses (among others) <code>std::unordered_map</code> containers as its
-underlying data structures. Again I didn't want to create a perfectly optimized implementation but to
-learn and have fun coding. If you have ideas for improvements or find bugs, feel free to notify me about them!
-When I have time I'll check whether using google's <code>dense_hash_map</code> results in better performance.</p>
+<p>The feature set of the container is limited but definitely enough for simple
+applications. Furthermore my implementation may be quite far from optimal
+performance because it uses (among others) <code>std::unordered_map</code> containers as
+its underlying data structures. Again I didn't want to create a perfectly
+optimized implementation but to learn and have fun coding. If you have ideas for
+improvements or find bugs, feel free to notify me about them! When I have time
+I'll check whether using google's <code>dense_hash_map</code> results in better performance.</p>
 
-<p>The project is licensed under the GNU GPL v2 license. Have a look into the LICENSE file for more information.</p>
+<p>The project is licensed under the GNU GPL v2 license. Have a look into the
+LICENSE file for more information.</p>
 
 <h2>
 <a id="quickstart" class="anchor" href="#quickstart" aria-hidden="true"><span class="octicon octicon-link"></span></a>Quickstart</h2>
 
-<p>To start using the <code>undirect_graph</code> simply include the <code>.h</code> files in your project and instantiate the graph
-with the corresponding template arguments:</p>
+<p>To start using the <code>undirect_graph</code> simply include the <code>.h</code> files in your
+project and instantiate the graph with the corresponding template arguments:</p>
 
-<div class="highlight highlight-c++"><pre><span class="pl-k">template </span>&lt;<span class="pl-k">typename</span> vertex_data_type_arg, <span class="pl-k">typename</span> vertex_id_type_arg, 
-          <span class="pl-k">typename</span> edge_data_type_arg, <span class="pl-k">typename</span> edge_id_type_arg&gt;
+<div class="highlight highlight-c++"><pre><span class="pl-k">template </span>&lt;<span class="pl-k">class</span> <span class="pl-en">Key_vertex</span>, <span class="pl-k">class</span> <span class="pl-en">T_vertex</span>,
+          <span class="pl-k">class</span> <span class="pl-en">Key_edge</span>, <span class="pl-k">class</span> <span class="pl-en">T_edge</span>&gt;
 <span class="pl-k">class</span> <span class="pl-en">undirected_graph</span>;</pre></div>
 
-<p>The <code>edge_id_type</code> has to meet certain criteria, for an easy start use the supplied <code>undirected_pair&lt;T&gt;</code> where <code>T</code>
-would be the <code>vertex_id_type</code> of the graph.</p>
+<p>The <code>Key_edge</code> type has to meet certain criteria, for an easy start use the
+supplied <code>undirected_pair&lt;T&gt;</code> where <code>T</code> would be the <code>Key_vertex</code> type of the
+graph.</p>
 
 <div class="highlight highlight-c++"><pre><span class="pl-k">template </span>&lt;<span class="pl-k">typename</span> T&gt;
 <span class="pl-k">class</span> <span class="pl-en">undirected_pair</span>;</pre></div>
 
-<p>Most of the time you can use <code>int</code> or <code>size_t</code> as the <code>vertex_id_type</code> and <code>undirected_pair&lt;int&gt;</code> or respectively
-<code>undirected_pair&lt;size_t&gt;</code> as the <code>edge_id_type</code>. If you want to use your own id types (maybe you already have ids
-for the objects in your code) make sure to check the requirements some paragraphs below.</p>
+<p>Most of the time you can use <code>int</code> or <code>size_t</code> as the <code>Key_vertex</code> type and
+<code>undirected_pair&lt;int&gt;</code> or respectively <code>undirected_pair&lt;size_t&gt;</code> as the
+<code>Key_edge</code> type. If you want to use your own id types (maybe you already have
+ids for the objects in your code) make sure to check the requirements some
+paragraphs below.</p>
 
 <h2>
 <a id="features" class="anchor" href="#features" aria-hidden="true"><span class="octicon octicon-link"></span></a>Features</h2>
 
-<p>The graph allows to store vertex data types with unique ids which are connected by edge data objects which
-have in turn unique ids. Naturally the graph is implemented using templates and therefore every data type
-is supported.</p>
+<p>The graph allows to store vertex data types with unique ids which are connected
+by edge data objects which have in turn unique ids. Naturally the graph is
+implemented using templates and therefore every data type is supported.</p>
 
-<p>In most operations the graph behaves similar to the <code>std::map</code> container because (a) it is built using maps and
-(b) it's what you're probably used to after working with stl containers. The only difference is that most methods
-have an appended <code>_vertex</code> or <code>_edge</code> to indicate on which object the method works.</p>
+<p>In most operations the graph behaves similar to the <code>std::map</code> container because
+(a) it is built using maps and (b) it's what you're probably used to after
+working with stl containers. The only difference is that most methods have an
+appended <code>_vertex</code> or <code>_edge</code> to indicate on which objects the method works.</p>
 
 <p>It is possible to:</p>
 
@@ -87,12 +97,13 @@ have an appended <code>_vertex</code> or <code>_edge</code> to indicate on which
 <li>remove vertices and egdes by id</li>
 <li>iterate through all vertices or edges (unordered)</li>
 <li>iterate through all adjacent vertices of a vertex with a specified id</li>
-<li>iterate through the graph vertices by using an breadth- or depth-first search iterator</li>
+<li>iterate through the graph vertices by using an breadth- or depth-first search
+iterator</li>
 </ul>
 
 <p>Some example code:</p>
 
-<div class="highlight highlight-c++"><pre><span class="pl-k">typedef</span> undirected_graph&lt;std::string, <span class="pl-c1">size_t</span>, <span class="pl-k">double</span>, undirected_pair&lt;<span class="pl-c1">size_t</span>&gt;&gt; graph_type;
+<div class="highlight highlight-c++"><pre><span class="pl-k">typedef</span> undirected_graph&lt;<span class="pl-c1">size_t</span>, std::string, undirected_pair&lt;<span class="pl-c1">size_t</span>&gt;, <span class="pl-k">double</span>&gt; graph_type;
 graph_type graph;
 
 <span class="pl-c">// Build graph</span>
@@ -104,7 +115,7 @@ graph.insert_edge(<span class="pl-c1">2</span>, <span class="pl-c1">3</span>, <s
 
 <span class="pl-c">// Print edge data</span>
 <span class="pl-k">for</span>(<span class="pl-k">auto</span> it = graph.begin_edges(); it != graph.end_edges(); ++it) {
-        std::cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Connection<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;first.<span class="pl-smi">a</span> &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>to<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;first.<span class="pl-smi">b</span> 
+        std::cout &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>Connection<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;first.<span class="pl-smi">a</span> &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>to<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;first.<span class="pl-smi">b</span>
                   &lt;&lt; <span class="pl-s"><span class="pl-pds">"</span>with value:<span class="pl-pds">"</span></span> &lt;&lt; it-&gt;second &lt;&lt; std::endl;
 }
 
@@ -117,7 +128,7 @@ breadth_first_iterator&lt;graph_type&gt; <span class="pl-en">bfs</span>(graph, g
 <span class="pl-c">// Remove a vertex and its edge(s)</span>
 graph.erase_vertex(<span class="pl-c1">2</span>);</pre></div>
 
-<p>More example code will be added to the repository soon.</p>
+<p>You can find more example code in the <code>main.cpp</code> in the test subfolder.</p>
 
 <h2>
 <a id="what-does-this-project-contain" class="anchor" href="#what-does-this-project-contain" aria-hidden="true"><span class="octicon octicon-link"></span></a>What does this project contain?</h2>
@@ -126,24 +137,29 @@ graph.erase_vertex(<span class="pl-c1">2</span>);</pre></div>
 
 <ul>
 <li>
-<code>undirected_graph</code> the main component of the graph I've been writing about this whole document.</li>
+<code>undirected_graph</code> the main component of the graph I've been writing about
+this whole document.</li>
 <li>
-<code>undirected_pair</code> a simple data type which behaves similar to a <code>std::pair</code> except for the fact that it is just
-for one data type, pair(a,b) and pair(b,a) compare as equal and it's sortable. The sorting order
-is determined by the smaller and bigger elements of the pairs. It's a simple data type to use for the
-edge ids in the graph.</li>
+<code>undirected_pair</code> a simple data type which behaves similar to a <code>std::pair</code>
+except for the fact that it is just for one data type, pair(a,b) and pair(b,a)
+compare as equal and it's sortable. The sorting order is determined by the
+smaller and bigger elements of the pairs. It's a simple data type to use for
+  the edge ids in the graph.</li>
 <li>
-<code>graph_search_iterator</code> is an abstract class that provides an interface for graph traversal iterators.
-Two subclasses are supplied: a breadth-first and a depth-first iterator.</li>
+<code>graph_search_iterator</code> is an abstract class that provides an interface for
+graph traversal iterators. Two subclasses are supplied: a breadth-first and a
+depth-first iterator.</li>
 </ul>
 
 <h2>
 <a id="requirements-for-the-data-types" class="anchor" href="#requirements-for-the-data-types" aria-hidden="true"><span class="octicon octicon-link"></span></a>Requirements for the data types</h2>
 
-<p>There are no requirements or restrictions on the data types supplied as <code>vertex_data_type</code> or <code>edge_data_type</code>.
-However there are some requirements for the id types. </p>
+<p>There are no requirements or restrictions on the data types supplied as
+<code>T_vertex</code> or <code>T_edge</code>. However there are some requirements for
+the id types.</p>
 
-<p><code>vertex_id_type</code> basically has to fulfil the same requirements as a key for an <code>std::unordered_set</code> and a <code>std::map</code>. Namely:</p>
+<p><code>Key_vertex</code> basically has to fulfil the same requirements as a key for an
+<code>std::unordered_set</code> and a <code>std::map</code>. Namely:</p>
 
 <ul>
 <li>Equality operator <code>==</code>
@@ -153,17 +169,19 @@ However there are some requirements for the id types. </p>
 <li>Specialized <code>std::hash</code> functor (see <a href="http://stackoverflow.com/a/17017281/929037">http://stackoverflow.com/a/17017281/929037</a>)</li>
 </ul>
 
-<p>The same applies to the <code>edge_id_type</code> with some more restrictions:</p>
+<p>The same applies to the <code>Key_edge</code> with some more restrictions:</p>
 
 <ul>
 <li>Additional constructor with the signature <code>edge_id(vertex_id a, vertex_id b)</code>
 </li>
-<li>Equality operator where <code>edge_id(a,b) == edge_id(b,a)</code> (this also affects the <code>&lt;</code>-operator and hash functor, see below)</li>
+<li>Equality operator where <code>edge_id(a,b) == edge_id(b,a)</code> (this also affects the
+<code>&lt;</code>-operator and hash functor, see below)</li>
 <li>Access to the two connected <code>vertex_id</code>s via a public <code>a</code> and <code>b</code> member</li>
 </ul>
 
-<p>For a data type that implements all these requirements have a look at the <code>undirected_pair</code>. Nevertheless here are the 
-axioms for the <code>&lt;</code>-operator of the <code>edge_id_type</code>: </p>
+<p>For a data type that implements all these requirements have a look at the
+<code>undirected_pair</code>. Nevertheless here are the axioms for the <code>&lt;</code>-operator of the
+<code>Key_edge</code>:</p>
 
 <pre><code>Let a, b, c, d be of type vertex_id and idA(a,b), idB(c,d) be of type edge_id. Then:
 1. min(a,b) &lt; min(c,d) then: (idA &lt; idB)
