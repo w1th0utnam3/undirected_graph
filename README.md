@@ -1,6 +1,6 @@
 # undirected_graph
 A simple (probably incomplete) implementation of an undirected graph in c++
-using the stl.
+using the stl. Note: The header files require c++11 to compile!
 
 During my work on a group assignment I needed a graph container to store objects
 and their connections. I knew that there is an implementation in the boost
