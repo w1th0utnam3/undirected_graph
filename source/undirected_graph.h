@@ -52,7 +52,7 @@ private:
 	// TODO: Replace forward_list with map because of slow erasing. Use unique_ptr to store them.
 
 	//! Type of the current graph
-	typedef undirected_graph<vertex_data_type, vertex_id_type, edge_data_type, edge_id_type> graph_type;
+	typedef undirected_graph<vertex_id_type, vertex_data_type, edge_id_type, edge_data_type> graph_type;
 	//! Type for the container of vertex data in the graph
 	typedef std::unordered_map<vertex_id_type, vertex_data_type> vertex_container;
 	//! Type for the container of edge data in the graph
