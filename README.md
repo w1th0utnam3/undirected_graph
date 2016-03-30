@@ -1,19 +1,15 @@
 # undirected_graph
-A simple (probably incomplete) implementation of an undirected graph in c++
-using the stl. Note: The header files require c++11 to compile!
+A simple implementation of an undirected graph in c++ using the stl.
 
-During my work on a group assignment I needed a graph container to store objects
-and their connections. I knew that there is an implementation in the boost
-library (http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/) but I wanted to
-play a little bit with templates and see how far I can get with it.
+During my work on a group assignment in university I was in need for a graph
+container with methods for breadth/depth-first traversal. I quickly found the
+implementation of the boost library (http://www.boost.org/doc/libs/1_58_0/libs/graph/doc/)
+but I did not want to use a premade solution immediately. As optimal performance
+was not required, I decided to develop my own container with corresponding
+traversal iterators.
 
-The feature set of the container is limited but definitely enough for simple
-applications. Furthermore my implementation may be quite far from optimal
-performance because it uses (among others) `std::unordered_map` containers as
-its underlying data structures. Again I didn't want to create a perfectly
-optimized implementation but to learn and have fun coding. If you have ideas for
-improvements or find bugs, feel free to notify me about them! When I have time
-I'll check whether using google's `dense_hash_map` results in better performance.
+If you have ideas for improvements or find bugs, feel free to notify me about
+them!
 
 The project is licensed under the GNU GPL v2 license. Have a look into the
 LICENSE file for more information.
@@ -27,6 +23,9 @@ template <class Key_vertex, class T_vertex,
 		  class Key_edge, class T_edge>
 class undirected_graph;
 ```
+where `T_vertex`/`T_edge` are the datatypes that are stored at the
+vertices/edges  and `Key_vertex`/`Key_edge` are the identifier types used to
+retrieve or remove objects from the graph.
 The `Key_edge` type has to meet certain criteria, for an easy start use the
 supplied `undirected_pair<T>` where `T` would be the `Key_vertex` type of the
 graph.
@@ -39,6 +38,8 @@ Most of the time you can use `int` or `size_t` as the `Key_vertex` type and
 `Key_edge` type. If you want to use your own id types (maybe you already have
 ids for the objects in your code) make sure to check the requirements some
 paragraphs below.
+
+Note: The header files require C++11 to compile.
 
 ## Features
 
